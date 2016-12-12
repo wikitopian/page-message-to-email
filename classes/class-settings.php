@@ -2,9 +2,10 @@
 
 class Page_Message_To_Email_Settings {
 
-	private $tag = 'page-message-to-email';
+	private $tag;
 
-	public function __construct() {
+	public function __construct( $tag ) {
+		$this->tag = $tag;
 
 		add_action(
 			'admin_menu',
@@ -61,6 +62,8 @@ PAGE;
 
 		echo "\n\t\t</table>\n";
 
+		$this->do_fb_user();
+
 		submit_button();
 		echo "\n\t</form>\n</div>\n";
 
@@ -80,6 +83,28 @@ PAGE;
 			</tr>
 
 OPTION;
+
+	}
+
+	public function do_fb_user() {
+
+		$fb_app_id     = esc_attr( get_option( $this->tag . '_fb_app_id',     '' ) );
+		$fb_app_secret = esc_attr( get_option( $this->tag . '_fb_app_secret', '' ) );
+		$fb_app_user   = esc_attr( get_option( $this->tag . '_fb_app_user',   '' ) );
+
+		if( empty( $fb_app_id ) || empty( $fb_app_secret ) ) {
+			echo '<br /><strong>No Credentials</strong><br />';
+			return;
+		}
+
+		$facebook  = new Page_Message_To_Email_Facebook( $this->tag );
+		$token_url = $facebook->get_token_url();
+		echo '<br /><strong><a href="' . $token_url . '">Fetch Permissions</a></strong><br />';
+
+		if( empty( $fb_app_user ) ) {
+			echo '<br /><strong>No User Token</strong><br />';
+			return;
+		}
 
 	}
 

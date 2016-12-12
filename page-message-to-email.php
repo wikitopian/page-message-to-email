@@ -14,15 +14,20 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 require_once( 'classes/class-settings.php' ); // menu and settings stuff
 require_once( 'classes/class-facebook.php' ); // facebook API interface
 
-require_once( 'libraries/php-graph-sdk/src/Facebook/Facebook.php' );
+//require_once( 'libraries/-graph-sdk/src/Facebook/Facebook.php' );
+require_once( 'libraries/vendor/autoload.php' );
 
 class Page_Message_To_Email {
+
+	private $tag;
 
 	private $settings;
 
 	public function __construct() {
 
-		$this->settings = new Page_Message_To_Email_Settings();
+		$this->tag = 'page-message-to-email';
+
+		$this->settings = new Page_Message_To_Email_Settings( $this->tag );
 
 	}
 
